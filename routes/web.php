@@ -13,6 +13,7 @@ use App\Http\Controllers\CmsProductController;
 use App\Http\Controllers\CmsServiceController;
 use App\Http\Controllers\CmsSiteSettingsController;
 use App\Http\Controllers\CmsTestimonialController;
+use App\Http\Controllers\CmsUserController;
 use App\Http\Controllers\PublicHomeController;
 use App\Http\Controllers\PublicAboutController;
 use App\Http\Controllers\PublicClientsController;
@@ -56,6 +57,7 @@ Route::middleware('auth')->prefix('cms')->name('cms.')->group(function () {
     Route::resource('faqs', CmsFaqController::class)->except(['show']);
     Route::resource('testimonials', CmsTestimonialController::class)->except(['show']);
     Route::resource('gallery', CmsGalleryController::class)->except(['show']);
+    Route::resource('users', CmsUserController::class)->except(['show']);
     Route::get('/messages', [CmsContactMessageController::class, 'index'])->name('messages.index');
     Route::get('/messages/{message}', [CmsContactMessageController::class, 'show'])->name('messages.show');
     Route::patch('/messages/{message}/replied', [CmsContactMessageController::class, 'markReplied'])->name('messages.replied');

@@ -19,6 +19,7 @@ class CmsDashboardController extends Controller
                 'faqs' => $this->countTable('faqs'),
                 'messages' => $this->countTable('contact_messages'),
                 'gallery' => $this->countTable('gallery'),
+                'users' => $this->countTable('users'),
             ],
             'newMessages' => $this->countTableWhere('contact_messages', 'status', 'new'),
         ]);

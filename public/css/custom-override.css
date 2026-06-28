@@ -518,6 +518,41 @@ h1,h2,h3,h4,h5,h6 { font-family: 'Nunito', sans-serif; color: var(--ve-dark); }
   border-color:var(--ve-gold);
   box-shadow:0 0 0 3px rgba(212,160,23,0.15);
 }
+.ve-password-field {
+  position:relative;
+  width:100%;
+}
+.ve-password-field input {
+  padding-right:48px;
+}
+.ve-cms-login-form .ve-password-field input {
+  margin-bottom:8px;
+}
+.ve-password-toggle,
+.ve-cms-login-form .ve-password-toggle {
+  position:absolute;
+  top:50%;
+  right:8px;
+  transform:translateY(-50%);
+  width:34px;
+  height:34px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  margin:0;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:var(--ve-text);
+  cursor:pointer;
+}
+.ve-password-toggle:hover,
+.ve-password-toggle:focus {
+  color:var(--ve-dark);
+  background:rgba(212,160,23,0.12);
+  outline:none;
+}
 .ve-cms-login-form button {
   border:0;
   cursor:pointer;
@@ -772,6 +807,9 @@ h1,h2,h3,h4,h5,h6 { font-family: 'Nunito', sans-serif; color: var(--ve-dark); }
 .ve-cms-field input,
 .ve-cms-field select {
   height:46px;
+}
+.ve-cms-field .ve-password-field input {
+  padding-right:48px;
 }
 .ve-cms-field input[type="file"] {
   height:auto;

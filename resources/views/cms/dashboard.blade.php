@@ -28,6 +28,9 @@
             <a href="{{ route('cms.testimonials.index') }}"><i class="fa fa-star"></i> Testimonials</a>
             <a href="{{ route('cms.gallery.index') }}"><i class="fa fa-image"></i> Gallery</a>
             <a href="{{ route('cms.messages.index') }}"><i class="fa fa-envelope"></i> Messages</a>
+            @if (auth()->user()->role === 'admin')
+                <a href="{{ route('cms.users.index') }}"><i class="fa fa-user-circle"></i> Users</a>
+            @endif
         </nav>
     </aside>
 
@@ -54,6 +57,7 @@
             <article><span>FAQs</span><strong>{{ $stats['faqs'] }}</strong></article>
             <article><span>Messages</span><strong>{{ $stats['messages'] }}</strong></article>
             <article><span>Gallery</span><strong>{{ $stats['gallery'] }}</strong></article>
+            <article><span>Users</span><strong>{{ $stats['users'] }}</strong></article>
         </section>
 
         <section class="ve-cms-panel">
