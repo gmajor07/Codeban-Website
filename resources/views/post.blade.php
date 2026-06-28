@@ -19,20 +19,19 @@
             <div class="ve-logo"><a href="{{ route('home') }}"><span class="ve-logo-icon">C</span><span class="ve-logo-text">Codeban<strong></strong></span></a></div>
             <nav class="ve-nav"><ul>
                 <li><a href="{{ route('home') }}">Home</a></li>
-                <li class="has-drop"><a href="{{ route('about') }}">About <i class="fa fa-angle-down"></i></a>
-                    <ul class="ve-dropdown"><li><a href="{{ route('about') }}">About Us</a></li><li><a href="{{ route('services') }}">Our Services</a></li><li><a href="{{ route('clients') }}">Clients</a></li></ul>
-                </li>
+                <li><a href="{{ route('about') }}">About</a></li>
                 <li><a href="{{ route('services') }}">Services</a></li>
                     <li><a href="{{ route('products') }}" class="active">Products</a></li>
                 <li><a href="{{ route('clients') }}">Clients</a></li>
-                <li><a href="{{ route('contact') }}">Contact</a></li>
+                    <li><a href="{{ route('gallery') }}">Gallery</a></li>
+                    <li><a href="{{ route('contact') }}">Contact</a></li>
             </ul></nav>
             <div class="ve-nav-cta"><a href="{{ route('contact') }}" class="ve-cta-btn">Contact Us <i class="fa fa-arrow-right"></i></a></div>
             <button class="ve-toggler" id="ve-toggle"><span></span><span></span><span></span></button>
         </div>
         <div class="ve-mobile-menu" id="ve-mobile-menu"><ul>
             <li><a href="{{ route('home') }}">Home</a></li><li><a href="{{ route('about') }}">About</a></li>
-            <li><a href="{{ route('services') }}">Services</a></li><li><a href="{{ route('products') }}">Products</a></li><li><a href="{{ route('clients') }}">Clients</a></li><li><a href="{{ route('contact') }}">Contact</a></li>
+            <li><a href="{{ route('services') }}">Services</a></li><li><a href="{{ route('products') }}">Products</a></li><li><a href="{{ route('clients') }}">Clients</a></li><li><a href="{{ route('gallery') }}">Gallery</a></li><li><a href="{{ route('contact') }}">Contact</a></li>
         </ul></div>
     </header>
     <section class="ve-page-hero" style="background-image:url({{ asset('img/bg-img/24.jpg') }});">
@@ -48,6 +47,24 @@
             <div class="row">
                 <div class="col-12 col-lg-8">
                     <div class="row">
+                        @if ($products->isNotEmpty())
+                            @foreach ($products as $product)
+                                <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="{{ min(($loop->iteration * 100), 1000) }}ms">
+                                    <div class="ve-insight-card">
+                                        <div class="ve-insight-img bg-img" style="background-image:url({{ $product->image ? asset($product->image) : asset('img/bg-img/10.jpg') }});"></div>
+                                        <div class="ve-insight-body">
+                                            <span class="ve-insight-cat">{{ $product->category?->name ?? 'Product' }}</span>
+                                            <h5><a href="{{ route('single-post', $product) }}">{{ $product->name }}</a></h5>
+                                            <p>{{ $product->description }}</p>
+                                            <div class="ve-insight-meta">
+                                                <span><i class="fa fa-shield"></i> {{ $product->featured ? 'Featured' : 'Available' }}</span>
+                                                <a href="{{ route('single-post', $product) }}">View Details <i class="fa fa-arrow-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="100ms"><div class="ve-insight-card"><div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/10.jpg') }});"></div><div class="ve-insight-body"><span class="ve-insight-cat">PPE</span><h5><a href="{{ route('contact') }}">Reflective Safety Jackets</a></h5><p>High-visibility workwear for construction, logistics, industrial, and field teams.</p><div class="ve-insight-meta"><span><i class="fa fa-shield"></i> Safety Wear</span><a href="{{ route('contact') }}">Request Quote <i class="fa fa-arrow-right"></i></a></div></div></div></div>
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="200ms"><div class="ve-insight-card"><div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/11.jpg') }});"></div><div class="ve-insight-body"><span class="ve-insight-cat">Footwear</span><h5><a href="{{ route('contact') }}">Safety Boots</a></h5><p>Protective footwear for demanding site, workshop, and industrial environments.</p><div class="ve-insight-meta"><span><i class="fa fa-road"></i> Foot Protection</span><a href="{{ route('contact') }}">Request Quote <i class="fa fa-arrow-right"></i></a></div></div></div></div>
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="300ms"><div class="ve-insight-card"><div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/12.jpg') }});"></div><div class="ve-insight-body"><span class="ve-insight-cat">PPE</span><h5><a href="{{ route('contact') }}">Helmets</a></h5><p>Head protection products for workplace safety and site compliance.</p><div class="ve-insight-meta"><span><i class="fa fa-industry"></i> Head Protection</span><a href="{{ route('contact') }}">Request Quote <i class="fa fa-arrow-right"></i></a></div></div></div></div>
@@ -70,6 +87,7 @@
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="2000ms"><div class="ve-insight-card"><div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/7.jpg') }});"></div><div class="ve-insight-body"><span class="ve-insight-cat">Advertising</span><h5><a href="{{ route('contact') }}">Business Branding &amp; Corporate Advertising Materials</a></h5><p>Business branding materials that support professional visibility and corporate communication.</p><div class="ve-insight-meta"><span><i class="fa fa-bullhorn"></i> Advertising</span><a href="{{ route('contact') }}">Request Quote <i class="fa fa-arrow-right"></i></a></div></div></div></div>
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="2100ms"><div class="ve-insight-card"><div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/8.jpg') }});"></div><div class="ve-insight-body"><span class="ve-insight-cat">Embroidery</span><h5><a href="{{ route('contact') }}">Security, Medical &amp; Chef Uniforms</a></h5><p>Customized uniforms for security teams, healthcare staff, chef teams, and service staff.</p><div class="ve-insight-meta"><span><i class="fa fa-scissors"></i> Sewing</span><a href="{{ route('contact') }}">Request Quote <i class="fa fa-arrow-right"></i></a></div></div></div></div>
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="2200ms"><div class="ve-insight-card"><div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/9.jpg') }});"></div><div class="ve-insight-body"><span class="ve-insight-cat">Customized Workwear</span><h5><a href="{{ route('contact') }}">Polo Shirts, Branded Caps &amp; Workwear</a></h5><p>Branded caps, polo shirts, and customized workwear for corporate teams and events.</p><div class="ve-insight-meta"><span><i class="fa fa-tags"></i> Branded Wear</span><a href="{{ route('contact') }}">Request Quote <i class="fa fa-arrow-right"></i></a></div></div></div></div>
+                        @endif
                     </div>
                     <div class="ve-pagination"><a href="#" class="active">1</a><a href="#">2</a><a href="#">3</a><a href="#"><i class="fa fa-chevron-right"></i></a></div>
                 </div>
@@ -82,19 +100,31 @@
                         <div class="ve-sidebar-widget">
                             <h5 class="ve-sidebar-title">Categories</h5>
                             <ul class="ve-cat-list">
+                                @if ($categories->isNotEmpty())
+                                    @foreach ($categories as $category)
+                                        <li><a href="#">{{ $category->name }} <span>{{ $category->products_count }}</span></a></li>
+                                    @endforeach
+                                @else
                                 <li><a href="#">PPE Products <span>20+</span></a></li>
                                 <li><a href="#">Footwear <span>4+</span></a></li>
                                 <li><a href="#">Head, Eye &amp; Hearing Protection <span>6+</span></a></li>
                                 <li><a href="#">Hand Protection <span>3+</span></a></li>
                                 <li><a href="#">Fire Safety <span>3+</span></a></li>
                                 <li><a href="#">Branding, Printing &amp; Embroidery <span>10+</span></a></li>
+                                @endif
                             </ul>
                         </div>
                         <div class="ve-sidebar-widget">
                             <h5 class="ve-sidebar-title">Popular Requests</h5>
+                            @if ($featuredProducts->isNotEmpty())
+                                @foreach ($featuredProducts as $featured)
+                                    <div class="ve-recent-post"><div class="ve-rp-img bg-img" style="background-image:url({{ $featured->image ? asset($featured->image) : asset('img/bg-img/10.jpg') }});"></div><div><a href="{{ route('single-post', $featured) }}">{{ $featured->name }}</a><span><i class="fa fa-shield"></i> {{ $featured->category?->name ?? 'Product' }}</span></div></div>
+                                @endforeach
+                            @else
                             <div class="ve-recent-post"><div class="ve-rp-img bg-img" style="background-image:url({{ asset('img/bg-img/10.jpg') }});"></div><div><a href="{{ route('contact') }}">Reflective Safety Jackets</a><span><i class="fa fa-shield"></i> PPE</span></div></div>
                             <div class="ve-recent-post"><div class="ve-rp-img bg-img" style="background-image:url({{ asset('img/bg-img/11.jpg') }});"></div><div><a href="{{ route('contact') }}">Safety Boots</a><span><i class="fa fa-road"></i> Footwear</span></div></div>
                             <div class="ve-recent-post"><div class="ve-rp-img bg-img" style="background-image:url({{ asset('img/bg-img/12.jpg') }});"></div><div><a href="{{ route('contact') }}">Corporate Uniforms</a><span><i class="fa fa-briefcase"></i> Uniforms</span></div></div>
+                            @endif
                         </div>
                         <div class="ve-sidebar-widget">
                             <h5 class="ve-sidebar-title">Popular Tags</h5>
@@ -112,22 +142,22 @@
     <footer class="ve-footer"><div class="container"><div class="row">
         <div class="col-12 col-sm-6 col-lg-4 mb-50"><div class="ve-footer-brand">
             <a href="{{ route('home') }}" class="ve-footer-logo"><span class="ve-logo-icon">C</span><span class="ve-logo-text">Codeban<strong></strong></span></a>
-            <p>Supplying PPE, uniforms, footwear, fire safety equipment, branding, and professional business solutions in Tanzania.</p>
+            <p>{{ $siteSettings->tagline }}</p>
             <div class="ve-social"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>
         </div></div>
         <div class="col-12 col-sm-6 col-lg-2 mb-50"><h5 class="ve-footer-title">Quick Links</h5>
-            <ul class="ve-footer-links"><li><a href="{{ route('home') }}">Home</a></li><li><a href="{{ route('about') }}">About Us</a></li><li><a href="{{ route('services') }}">Services</a></li><li><a href="{{ route('products') }}">Products</a></li><li><a href="{{ route('clients') }}">Clients</a></li><li><a href="{{ route('contact') }}">Contact</a></li></ul>
+            <ul class="ve-footer-links"><li><a href="{{ route('home') }}">Home</a></li><li><a href="{{ route('about') }}">About Us</a></li><li><a href="{{ route('services') }}">Services</a></li><li><a href="{{ route('products') }}">Products</a></li><li><a href="{{ route('clients') }}">Clients</a></li><li><a href="{{ route('gallery') }}">Gallery</a></li><li><a href="{{ route('contact') }}">Contact</a></li></ul>
         </div>
         <div class="col-12 col-sm-6 col-lg-3 mb-50"><h5 class="ve-footer-title">Our Services</h5>
             <ul class="ve-footer-links"><li><a href="#">PPE Products</a></li><li><a href="#">Safety Uniforms</a></li><li><a href="#">Official Uniforms</a></li><li><a href="#">Footwear</a></li><li><a href="#">Fire Extinguishers</a></li></ul>
         </div>
         <div class="col-12 col-sm-6 col-lg-3 mb-50"><h5 class="ve-footer-title">Get In Touch</h5>
-            <ul class="ve-footer-contact"><li><i class="fa fa-map-marker"></i> Block G Plot No.12, House No.1, Macedonia/Baraka Street, Tabata - Kinyerezi, Dar es Salaam, Tanzania</li><li><i class="fa fa-phone"></i> +255 784 993 355 / +255 658 634 462 / +255 713 185 183</li><li><i class="fa fa-envelope"></i> codebancl@gmail.com / barakamaka31@gmail.com / info@codeban.co.tz</li>
-                        <li><i class="fa fa-globe"></i> www.codeban.co.tz</li><li><i class="fa fa-instagram"></i> @codeban2020</li></ul>
+            <ul class="ve-footer-contact"><li><i class="fa fa-map-marker"></i> {{ $siteSettings->address }}</li><li><i class="fa fa-phone"></i> {{ $siteSettings->phoneLine() }}</li><li><i class="fa fa-envelope"></i> {{ $siteSettings->emailLine() }}</li>
+                        <li><i class="fa fa-globe"></i> {{ $siteSettings->website }}</li><li><i class="fa fa-instagram"></i> {{ $siteSettings->instagram }}</li></ul>
         </div>
     </div></div>
     <div class="ve-footer-bottom"><div class="container"><div class="ve-footer-bottom-inner">
-        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> Codeban Company Limited. All Rights Reserved <a href="https://github.com/Rabina-Vishwakarma/" class="text-white" target="_blank">Rabina Vishwakarma</a> • Distributed by <a href="https://themewagon.com" class="text-white" target="_blank">ThemeWagon</a></p>
+        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved <a href="https://github.com/Rabina-Vishwakarma/" class="text-white" target="_blank">Rabina Vishwakarma</a> • Distributed by <a href="https://themewagon.com" class="text-white" target="_blank">ThemeWagon</a></p>
         <ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="{{ route('login') }}" class="ve-footer-admin-link" aria-label="CMS login" title="CMS login"><i class="fa fa-lock"></i></a></li><li><a href="#">Cookie Policy</a></li></ul>
     </div></div></div></footer>
     <script src="{{ asset('js/jquery/jquery-2.2.4.min.js') }}"></script>

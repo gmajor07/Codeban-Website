@@ -20,17 +20,12 @@
             <nav class="ve-nav">
                 <ul>
                     <li><a href="{{ route('home') }}">Home</a></li>
-                    <li class="has-drop"><a href="{{ route('about') }}"  class='active'>About <i class="fa fa-angle-down"></i></a>
-                        <ul class="ve-dropdown">
-                            <li><a href="{{ route('about') }}">About Us</a></li>
-                            <li><a href="{{ route('services') }}">Our Services</a></li>
-                            <li><a href="{{ route('clients') }}">Clients</a></li>
-                        </ul>
-                    </li>
+                    <li><a href="{{ route('about') }}"  class='active'>About</a></li>
                     <li><a href="{{ route('services') }}">Services</a></li>
                     <li><a href="{{ route('products') }}">Products</a></li>
                         <li><a href="{{ route('clients') }}">Clients</a></li>
-                        <li><a href="{{ route('contact') }}">Contact</a></li>
+                    <li><a href="{{ route('gallery') }}">Gallery</a></li>
+                    <li><a href="{{ route('contact') }}">Contact</a></li>
                 </ul>
             </nav>
             <div class="ve-nav-cta"><a href="{{ route('contact') }}" class="ve-cta-btn">Contact Us <i class="fa fa-arrow-right"></i></a></div>
@@ -43,15 +38,16 @@
                 <li><a href="{{ route('services') }}">Services</a></li>
                 <li><a href="{{ route('products') }}">Products</a></li>
                         <li><a href="{{ route('clients') }}">Clients</a></li>
-                        <li><a href="{{ route('contact') }}">Contact</a></li>
+                    <li><a href="{{ route('gallery') }}">Gallery</a></li>
+                    <li><a href="{{ route('contact') }}">Contact</a></li>
             </ul>
         </div>
     </header>
-    <section class="ve-page-hero" style="background-image:url({{ asset('img/bg-img/13.jpg') }});">
+    <section class="ve-page-hero" style="background-image:url({{ asset($aboutSections['about_hero']['image']) }});">
         <div class="ve-page-hero-overlay"></div>
         <div class="container ve-page-hero-content">
-            <span class="ve-section-tag">Our Story</span>
-            <h1>Building Trust Since <span>2013</span></h1>
+            <span class="ve-section-tag">{{ $aboutSections['about_hero']['subtitle'] }}</span>
+            <h1>{{ $aboutSections['about_hero']['title'] }}</h1>
             <nav aria-label="breadcrumb">
                 <ol class="ve-breadcrumb">
                     <li><a href="{{ route('home') }}">Home</a></li>
@@ -67,22 +63,24 @@
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6 wow fadeInLeft" data-wow-delay="100ms">
                     <div class="ve-about-img-stack">
-                        <div class="ve-about-img-1 bg-img" style="background-image:url({{ asset('img/bg-img/14.jpg') }});"></div>
-                        <div class="ve-about-img-2 bg-img" style="background-image:url({{ asset('img/bg-img/5.jpg') }});"></div>
+                        <div class="ve-about-img-1 bg-img" style="background-image:url({{ asset($aboutSections['about_intro_main_image']['image']) }});"></div>
+                        <div class="ve-about-img-2 bg-img" style="background-image:url({{ asset($aboutSections['about_intro_accent_image']['image']) }});"></div>
                         <div class="ve-about-ribbon"><strong>10+</strong><span>Years of Trust</span></div>
                     </div>
                 </div>
                 <div class="col-12 col-lg-6 wow fadeInRight" data-wow-delay="200ms">
                     <div class="ve-about-text">
-                        <span class="ve-section-tag">Who We Are</span>
-                        <h2>A Firm Built on <span>Integrity</span> &amp; Results</h2>
-                        <p class="ve-lead">Codeban Company Limited is a local multi-work company established in 2013.</p>
-                        <p>We provide industrial safety materials, safety uniforms, official uniforms, equipment, building renovation support, banners, sewing, embroidery, and branding solutions. Our goal is to deliver reliable products and professional services with integrity, quality, and customer satisfaction.</p>
+                        <span class="ve-section-tag">{{ $aboutSections['about_intro']['subtitle'] }}</span>
+                        <h2>{{ $aboutSections['about_intro']['title'] }}</h2>
+                        @foreach (preg_split("/\r\n|\n|\r/", $aboutSections['about_intro']['content']) as $paragraph)
+                            @if (trim($paragraph) !== '')
+                                <p @class(['ve-lead' => $loop->first])>{{ $paragraph }}</p>
+                            @endif
+                        @endforeach
                         <div class="ve-about-features">
-                            <div class="ve-af-item"><i class="fa fa-check"></i><span>PPE products and industrial safety materials</span></div>
-                            <div class="ve-af-item"><i class="fa fa-check"></i><span>Safety uniforms and official uniforms</span></div>
-                            <div class="ve-af-item"><i class="fa fa-check"></i><span>Banners, sewing, embroidery, and branding</span></div>
-                            <div class="ve-af-item"><i class="fa fa-check"></i><span>Reliable service with integrity and quality</span></div>
+                            @foreach ($aboutFeatures as $feature)
+                                <div class="ve-af-item"><i class="{{ $feature['subtitle'] ?: 'fa fa-check' }}"></i><span>{{ $feature['title'] }}</span></div>
+                            @endforeach
                         </div>
                         <a href="{{ route('services') }}" class="ve-btn-primary mt-30">View Our Services</a>
                     </div>
@@ -100,19 +98,19 @@
             </div>
             <div class="ve-mvv-grid">
                 <div class="ve-mvv-card wow fadeInUp" data-wow-delay="100ms">
-                    <div class="ve-mvv-icon"><i class="fa fa-bullseye"></i></div>
-                    <h4>Our Mission</h4>
-                    <p>To offer excellent services in each of our professional disciplines in accordance with statutory practices, codes, and integrity.</p>
+                    <div class="ve-mvv-icon"><i class="{{ $aboutSections['about_mission']['subtitle'] }}"></i></div>
+                    <h4>{{ $aboutSections['about_mission']['title'] }}</h4>
+                    <p>{{ $aboutSections['about_mission']['content'] }}</p>
                 </div>
                 <div class="ve-mvv-card wow fadeInUp" data-wow-delay="250ms">
-                    <div class="ve-mvv-icon"><i class="fa fa-eye"></i></div>
-                    <h4>Our Vision</h4>
-                    <p>To be the most distinguished private company offering the best products and services in Tanzania and beyond.</p>
+                    <div class="ve-mvv-icon"><i class="{{ $aboutSections['about_vision']['subtitle'] }}"></i></div>
+                    <h4>{{ $aboutSections['about_vision']['title'] }}</h4>
+                    <p>{{ $aboutSections['about_vision']['content'] }}</p>
                 </div>
                 <div class="ve-mvv-card wow fadeInUp" data-wow-delay="400ms">
-                    <div class="ve-mvv-icon"><i class="fa fa-heart"></i></div>
-                    <h4>Our Approach</h4>
-                    <p>We believe teamwork, clear communication, and professional project management are key to delivering successful results for every client.</p>
+                    <div class="ve-mvv-icon"><i class="{{ $aboutSections['about_values']['subtitle'] }}"></i></div>
+                    <h4>{{ $aboutSections['about_values']['title'] }}</h4>
+                    <p>{{ $aboutSections['about_values']['content'] }}</p>
                 </div>
             </div>
         </div>
@@ -127,42 +125,17 @@
                 <p>We support companies that need dependable PPE, uniforms, branding, sewing, embroidery, and practical project support.</p>
             </div>
             <div class="row">
-                <div class="col-12 col-sm-6 col-lg-3 wow fadeInUp" data-wow-delay="100ms">
-                    <div class="ve-team-card">
-                        <div class="ve-team-img bg-img" style="background-image:url({{ asset('img/bg-img/15.jpg') }});"></div>
-                        <div class="ve-team-info">
-                            <h5>PPE Supply</h5><span>Safety Materials &amp; Equipment</span>
-                            <div class="ve-team-social"><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-twitter"></i></a></div>
+                @foreach ($aboutWorkCards as $workCard)
+                    <div class="col-12 col-sm-6 col-lg-3 wow fadeInUp" data-wow-delay="{{ $loop->iteration * 100 }}ms">
+                        <div class="ve-team-card">
+                            <div class="ve-team-img bg-img" style="background-image:url({{ asset($workCard['image']) }});"></div>
+                            <div class="ve-team-info">
+                                <h5>{{ $workCard['title'] }}</h5><span>{{ $workCard['subtitle'] }}</span>
+                                <div class="ve-team-social"><a href="{{ route('contact') }}"><i class="fa fa-envelope"></i></a><a href="{{ route('services') }}"><i class="fa fa-briefcase"></i></a></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3 wow fadeInUp" data-wow-delay="200ms">
-                    <div class="ve-team-card">
-                        <div class="ve-team-img bg-img" style="background-image:url({{ asset('img/bg-img/16.jpg') }});"></div>
-                        <div class="ve-team-info">
-                            <h5>Uniform Services</h5><span>Safety &amp; Official Uniforms</span>
-                            <div class="ve-team-social"><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-twitter"></i></a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3 wow fadeInUp" data-wow-delay="300ms">
-                    <div class="ve-team-card">
-                        <div class="ve-team-img bg-img" style="background-image:url({{ asset('img/bg-img/17.jpg') }});"></div>
-                        <div class="ve-team-info">
-                            <h5>Branding</h5><span>Banners, Sewing &amp; Embroidery</span>
-                            <div class="ve-team-social"><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-twitter"></i></a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3 wow fadeInUp" data-wow-delay="400ms">
-                    <div class="ve-team-card">
-                        <div class="ve-team-img bg-img" style="background-image:url({{ asset('img/bg-img/18.jpg') }});"></div>
-                        <div class="ve-team-info">
-                            <h5>Project Support</h5><span>Renovation &amp; Business Solutions</span>
-                            <div class="ve-team-social"><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-twitter"></i></a></div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -217,7 +190,7 @@
                 <div class="col-12 col-sm-6 col-lg-4 mb-50">
                     <div class="ve-footer-brand">
                         <a href="{{ route('home') }}" class="ve-footer-logo"><span class="ve-logo-icon">C</span><span class="ve-logo-text">Codeban<strong></strong></span></a>
-                        <p>Supplying PPE, uniforms, footwear, fire safety equipment, branding, and professional business solutions in Tanzania.</p>
+                        <p>{{ $siteSettings->tagline }}</p>
                         <div class="ve-social">
                             <a href="#"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
@@ -234,7 +207,8 @@
                         <li><a href="{{ route('services') }}">Services</a></li>
                         <li><a href="{{ route('products') }}">Products</a></li>
                         <li><a href="{{ route('clients') }}">Clients</a></li>
-                        <li><a href="{{ route('contact') }}">Contact</a></li>
+                    <li><a href="{{ route('gallery') }}">Gallery</a></li>
+                    <li><a href="{{ route('contact') }}">Contact</a></li>
                     </ul>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3 mb-50">
@@ -249,11 +223,11 @@
                 <div class="col-12 col-sm-6 col-lg-3 mb-50">
                     <h5 class="ve-footer-title">Get In Touch</h5>
                     <ul class="ve-footer-contact">
-                        <li><i class="fa fa-map-marker"></i> Block G Plot No.12, House No.1, Macedonia/Baraka Street, Tabata - Kinyerezi, Dar es Salaam, Tanzania</li>
-                        <li><i class="fa fa-phone"></i> +255 784 993 355 / +255 658 634 462 / +255 713 185 183</li>
-                        <li><i class="fa fa-envelope"></i> codebancl@gmail.com / barakamaka31@gmail.com / info@codeban.co.tz</li>
-                        <li><i class="fa fa-globe"></i> www.codeban.co.tz</li>
-                        <li><i class="fa fa-instagram"></i> @codeban2020</li>
+                        <li><i class="fa fa-map-marker"></i> {{ $siteSettings->address }}</li>
+                        <li><i class="fa fa-phone"></i> {{ $siteSettings->phoneLine() }}</li>
+                        <li><i class="fa fa-envelope"></i> {{ $siteSettings->emailLine() }}</li>
+                        <li><i class="fa fa-globe"></i> {{ $siteSettings->website }}</li>
+                        <li><i class="fa fa-instagram"></i> {{ $siteSettings->instagram }}</li>
                     </ul>
                 </div>
             </div>
@@ -261,7 +235,7 @@
         <div class="ve-footer-bottom">
             <div class="container">
                 <div class="ve-footer-bottom-inner">
-                    <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> Codeban Company Limited. All Rights Reserved <a href="https://github.com/Rabina-Vishwakarma/" class="text-white" target="_blank">Rabina Vishwakarma</a> • Distributed by <a href="https://themewagon.com" class="text-white" target="_blank">ThemeWagon</a></p>
+                    <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved <a href="https://github.com/Rabina-Vishwakarma/" class="text-white" target="_blank">Rabina Vishwakarma</a> • Distributed by <a href="https://themewagon.com" class="text-white" target="_blank">ThemeWagon</a></p>
                     <ul>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms of Use</a></li>

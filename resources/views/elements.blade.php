@@ -19,20 +19,19 @@
             <div class="ve-logo"><a href="{{ route('home') }}"><span class="ve-logo-icon">C</span><span class="ve-logo-text">Codeban<strong></strong></span></a></div>
             <nav class="ve-nav"><ul>
                 <li><a href="{{ route('home') }}">Home</a></li>
-                <li class="has-drop"><a href="{{ route('about') }}" class="active">About <i class="fa fa-angle-down"></i></a>
-                    <ul class="ve-dropdown"><li><a href="{{ route('about') }}">About Us</a></li><li><a href="{{ route('services') }}">Our Services</a></li><li><a href="{{ route('clients') }}">Clients</a></li></ul>
-                </li>
+                <li><a href="{{ route('about') }}">About</a></li>
                 <li><a href="{{ route('services') }}">Services</a></li>
                     <li><a href="{{ route('products') }}">Products</a></li>
-                        <li><a href="{{ route('clients') }}">Clients</a></li>
-                        <li><a href="{{ route('contact') }}">Contact</a></li>
+                        <li><a href="{{ route('clients') }}" class="active">Clients</a></li>
+                    <li><a href="{{ route('gallery') }}">Gallery</a></li>
+                    <li><a href="{{ route('contact') }}">Contact</a></li>
             </ul></nav>
             <div class="ve-nav-cta"><a href="{{ route('contact') }}" class="ve-cta-btn">Contact Us <i class="fa fa-arrow-right"></i></a></div>
             <button class="ve-toggler" id="ve-toggle"><span></span><span></span><span></span></button>
         </div>
         <div class="ve-mobile-menu" id="ve-mobile-menu"><ul>
             <li><a href="{{ route('home') }}">Home</a></li><li><a href="{{ route('about') }}">About</a></li>
-            <li><a href="{{ route('services') }}">Services</a></li><li><a href="{{ route('products') }}">Products</a></li><li><a href="{{ route('clients') }}">Clients</a></li><li><a href="{{ route('contact') }}">Contact</a></li>
+            <li><a href="{{ route('services') }}">Services</a></li><li><a href="{{ route('products') }}">Products</a></li><li><a href="{{ route('clients') }}">Clients</a></li><li><a href="{{ route('gallery') }}">Gallery</a></li><li><a href="{{ route('contact') }}">Contact</a></li>
         </ul></div>
     </header>
     <section class="ve-page-hero" style="background-image:url({{ asset('img/bg-img/13.jpg') }});">
@@ -65,22 +64,29 @@
             <div class="ve-el-block">
                 <h3 class="ve-el-title"><span>02</span> Trusted By Leading Organizations</h3>
                 <p>Codeban Company Limited has supplied and served businesses across logistics, manufacturing, mining, energy, construction, and industrial sectors.</p>
-                <div class="ve-el-demo">
-                    <a href="#" class="ve-btn-primary">Tata</a>
-                    <a href="#" class="ve-btn-ghost">John Deere</a>
-                    <a href="#" class="ve-btn-white" style="background:var(--ve-dark);color:#fff;">Dangote Cement</a>
-                    <a href="#" class="ve-btn-primary" style="background:transparent;border:2px solid var(--ve-gold);color:var(--ve-gold);">CRDB Bank</a>
-                    <a href="#" class="ve-cta-btn">Taifa Gas <i class="fa fa-check"></i></a>
-                    <a href="#" class="ve-btn-ghost">AGL</a>
-                    <a href="#" class="ve-btn-primary">ALAF</a>
-                    <a href="#" class="ve-btn-white" style="background:var(--ve-dark);color:#fff;">Wilmar</a>
-                    <a href="#" class="ve-btn-primary" style="background:transparent;border:2px solid var(--ve-gold);color:var(--ve-gold);">Pump Energy</a>
-                    <a href="#" class="ve-btn-ghost">Mamba Mining</a>
-                    <a href="#" class="ve-btn-primary">Sao Hill Industries</a>
-                    <a href="#" class="ve-btn-white" style="background:var(--ve-dark);color:#fff;">Mandao Logistics</a>
-                    <a href="#" class="ve-btn-primary" style="background:transparent;border:2px solid var(--ve-gold);color:var(--ve-gold);">Western Hauliers</a>
-                    <a href="#" class="ve-cta-btn">Jitegemee Holdings <i class="fa fa-check"></i></a>
-                </div>
+                @if ($clients->isNotEmpty())
+                    <div class="ve-client-grid">
+                        @foreach ($clients as $client)
+                            <a href="{{ $client->websiteUrl() }}" class="ve-client-card" @if ($client->website) target="_blank" rel="noopener" @endif>
+                                @if ($client->logo)
+                                    <span class="ve-client-logo" style="background-image:url({{ asset($client->logo) }});"></span>
+                                @else
+                                    <span class="ve-client-initial">{{ strtoupper(substr($client->name, 0, 1)) }}</span>
+                                @endif
+                                <strong>{{ $client->name }}</strong>
+                            </a>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="ve-el-demo">
+                        <a href="#" class="ve-btn-primary">Tata</a>
+                        <a href="#" class="ve-btn-ghost">John Deere</a>
+                        <a href="#" class="ve-btn-white" style="background:var(--ve-dark);color:#fff;">Dangote Cement</a>
+                        <a href="#" class="ve-btn-primary" style="background:transparent;border:2px solid var(--ve-gold);color:var(--ve-gold);">CRDB Bank</a>
+                        <a href="#" class="ve-cta-btn">Taifa Gas <i class="fa fa-check"></i></a>
+                        <a href="#" class="ve-btn-ghost">AGL</a>
+                    </div>
+                @endif
             </div>
 
             <!-- SERVICE CARDS -->
@@ -99,16 +105,28 @@
                 <div class="row">
                     <div class="col-12 col-lg-6">
                         <div class="ve-faq-list">
-                            <div class="ve-faq-item open"><div class="ve-faq-q"><span>How do clients start working with Codeban?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">Send your request through the contact page with quantities, sizes, product type, and branding details.</div></div>
-                            <div class="ve-faq-item"><div class="ve-faq-q"><span>Do you support bulk corporate orders?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">Yes. We supply businesses and institutions with bulk PPE, uniforms, banners, and branded items.</div></div>
-                            <div class="ve-faq-item"><div class="ve-faq-q"><span>Which sectors do you serve?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">We serve logistics, manufacturing, mining, energy, construction, and industrial sectors.</div></div>
+                            @if ($faqs->isNotEmpty())
+                                @foreach ($faqs->take(ceil($faqs->count() / 2)) as $faq)
+                                    <div class="ve-faq-item @if ($loop->first) open @endif"><div class="ve-faq-q"><span>{{ $faq->question }}</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">{{ $faq->answer }}</div></div>
+                                @endforeach
+                            @else
+                                <div class="ve-faq-item open"><div class="ve-faq-q"><span>How do clients start working with Codeban?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">Send your request through the contact page with quantities, sizes, product type, and branding details.</div></div>
+                                <div class="ve-faq-item"><div class="ve-faq-q"><span>Do you support bulk corporate orders?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">Yes. We supply businesses and institutions with bulk PPE, uniforms, banners, and branded items.</div></div>
+                                <div class="ve-faq-item"><div class="ve-faq-q"><span>Which sectors do you serve?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">We serve logistics, manufacturing, mining, energy, construction, and industrial sectors.</div></div>
+                            @endif
                         </div>
                     </div>
                     <div class="col-12 col-lg-6">
                         <div class="ve-faq-list">
-                            <div class="ve-faq-item"><div class="ve-faq-q"><span>How do you handle quotations?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">We provide clear pricing based on product type, quantity, branding, and delivery requirements.</div></div>
-                            <div class="ve-faq-item"><div class="ve-faq-q"><span>Do you serve clients across Tanzania?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">Yes, we support clients across Tanzania based on order type and delivery arrangements.</div></div>
-                            <div class="ve-faq-item"><div class="ve-faq-q"><span>Can we request branded uniforms?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">Yes, we support sewing, embroidery, logo application, and branded team wear.</div></div>
+                            @if ($faqs->isNotEmpty())
+                                @foreach ($faqs->skip(ceil($faqs->count() / 2)) as $faq)
+                                    <div class="ve-faq-item"><div class="ve-faq-q"><span>{{ $faq->question }}</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">{{ $faq->answer }}</div></div>
+                                @endforeach
+                            @else
+                                <div class="ve-faq-item"><div class="ve-faq-q"><span>How do you handle quotations?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">We provide clear pricing based on product type, quantity, branding, and delivery requirements.</div></div>
+                                <div class="ve-faq-item"><div class="ve-faq-q"><span>Do you serve clients across Tanzania?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">Yes, we support clients across Tanzania based on order type and delivery arrangements.</div></div>
+                                <div class="ve-faq-item"><div class="ve-faq-q"><span>Can we request branded uniforms?</span><i class="fa fa-plus"></i></div><div class="ve-faq-a">Yes, we support sewing, embroidery, logo application, and branded team wear.</div></div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -118,9 +136,22 @@
             <div class="ve-el-block">
                 <h3 class="ve-el-title"><span>05</span> Client Focus</h3>
                 <div class="ve-testi-grid">
-                    <div class="ve-testi-card"><div class="ve-testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"Codeban supports corporate teams with PPE, uniforms, and branding materials for daily operations."</p><div class="ve-testi-author"><div class="ve-testi-avatar bg-img" style="background-image:url({{ asset('img/bg-img/32.jpg') }});"></div><div><strong>Alex Morgan</strong><span>Entrepreneur</span></div></div></div>
-                    <div class="ve-testi-card"><div class="ve-testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"We focus on reliable supply, clear communication, and practical support for every order."</p><div class="ve-testi-author"><div class="ve-testi-avatar bg-img" style="background-image:url({{ asset('img/bg-img/33.jpg') }});"></div><div><strong>Sarah Patel</strong><span>Marketing Director</span></div></div></div>
-                    <div class="ve-testi-card"><div class="ve-testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"Our work supports companies that need safety-first products and a professional brand presence."</p><div class="ve-testi-author"><div class="ve-testi-avatar bg-img" style="background-image:url({{ asset('img/bg-img/14.jpg') }});"></div><div><strong>James Liu</strong><span>Business Owner</span></div></div></div>
+                    @if ($testimonials->isNotEmpty())
+                        @foreach ($testimonials as $testimonial)
+                            <div class="ve-testi-card">
+                                <div class="ve-testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                                <p>"{{ $testimonial->message }}"</p>
+                                <div class="ve-testi-author">
+                                    <div class="ve-testi-avatar bg-img" style="background-image:url({{ $testimonial->image ? asset($testimonial->image) : asset('img/bg-img/32.jpg') }});"></div>
+                                    <div><strong>{{ $testimonial->client_name }}</strong><span>{{ $testimonial->company }}</span></div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="ve-testi-card"><div class="ve-testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"Codeban supports corporate teams with PPE, uniforms, and branding materials for daily operations."</p><div class="ve-testi-author"><div class="ve-testi-avatar bg-img" style="background-image:url({{ asset('img/bg-img/32.jpg') }});"></div><div><strong>Alex Morgan</strong><span>Entrepreneur</span></div></div></div>
+                        <div class="ve-testi-card"><div class="ve-testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"We focus on reliable supply, clear communication, and practical support for every order."</p><div class="ve-testi-author"><div class="ve-testi-avatar bg-img" style="background-image:url({{ asset('img/bg-img/33.jpg') }});"></div><div><strong>Sarah Patel</strong><span>Marketing Director</span></div></div></div>
+                        <div class="ve-testi-card"><div class="ve-testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"Our work supports companies that need safety-first products and a professional brand presence."</p><div class="ve-testi-author"><div class="ve-testi-avatar bg-img" style="background-image:url({{ asset('img/bg-img/14.jpg') }});"></div><div><strong>James Liu</strong><span>Business Owner</span></div></div></div>
+                    @endif
                 </div>
             </div>
 
@@ -184,22 +215,22 @@
     <footer class="ve-footer"><div class="container"><div class="row">
         <div class="col-12 col-sm-6 col-lg-4 mb-50"><div class="ve-footer-brand">
             <a href="{{ route('home') }}" class="ve-footer-logo"><span class="ve-logo-icon">C</span><span class="ve-logo-text">Codeban<strong></strong></span></a>
-            <p>Supplying PPE, uniforms, footwear, fire safety equipment, branding, and professional business solutions in Tanzania.</p>
+            <p>{{ $siteSettings->tagline }}</p>
             <div class="ve-social"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>
         </div></div>
         <div class="col-12 col-sm-6 col-lg-2 mb-50"><h5 class="ve-footer-title">Quick Links</h5>
-            <ul class="ve-footer-links"><li><a href="{{ route('home') }}">Home</a></li><li><a href="{{ route('about') }}">About Us</a></li><li><a href="{{ route('services') }}">Services</a></li><li><a href="{{ route('products') }}">Products</a></li><li><a href="{{ route('clients') }}">Clients</a></li><li><a href="{{ route('contact') }}">Contact</a></li></ul>
+            <ul class="ve-footer-links"><li><a href="{{ route('home') }}">Home</a></li><li><a href="{{ route('about') }}">About Us</a></li><li><a href="{{ route('services') }}">Services</a></li><li><a href="{{ route('products') }}">Products</a></li><li><a href="{{ route('clients') }}">Clients</a></li><li><a href="{{ route('gallery') }}">Gallery</a></li><li><a href="{{ route('contact') }}">Contact</a></li></ul>
         </div>
         <div class="col-12 col-sm-6 col-lg-3 mb-50"><h5 class="ve-footer-title">Our Services</h5>
             <ul class="ve-footer-links"><li><a href="#">PPE Products</a></li><li><a href="#">Safety Uniforms</a></li><li><a href="#">Official Uniforms</a></li><li><a href="#">Footwear</a></li><li><a href="#">Fire Extinguishers</a></li></ul>
         </div>
         <div class="col-12 col-sm-6 col-lg-3 mb-50"><h5 class="ve-footer-title">Get In Touch</h5>
-            <ul class="ve-footer-contact"><li><i class="fa fa-map-marker"></i> Block G Plot No.12, House No.1, Macedonia/Baraka Street, Tabata - Kinyerezi, Dar es Salaam, Tanzania</li><li><i class="fa fa-phone"></i> +255 784 993 355 / +255 658 634 462 / +255 713 185 183</li><li><i class="fa fa-envelope"></i> codebancl@gmail.com / barakamaka31@gmail.com / info@codeban.co.tz</li>
-                        <li><i class="fa fa-globe"></i> www.codeban.co.tz</li><li><i class="fa fa-instagram"></i> @codeban2020</li></ul>
+            <ul class="ve-footer-contact"><li><i class="fa fa-map-marker"></i> {{ $siteSettings->address }}</li><li><i class="fa fa-phone"></i> {{ $siteSettings->phoneLine() }}</li><li><i class="fa fa-envelope"></i> {{ $siteSettings->emailLine() }}</li>
+                        <li><i class="fa fa-globe"></i> {{ $siteSettings->website }}</li><li><i class="fa fa-instagram"></i> {{ $siteSettings->instagram }}</li></ul>
         </div>
     </div></div>
     <div class="ve-footer-bottom"><div class="container"><div class="ve-footer-bottom-inner">
-        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> Codeban Company Limited. All Rights Reserved <a href="https://github.com/Rabina-Vishwakarma/" class="text-white" target="_blank">Rabina Vishwakarma</a> • Distributed by <a href="https://themewagon.com" class="text-white" target="_blank">ThemeWagon</a></p>
+        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved <a href="https://github.com/Rabina-Vishwakarma/" class="text-white" target="_blank">Rabina Vishwakarma</a> • Distributed by <a href="https://themewagon.com" class="text-white" target="_blank">ThemeWagon</a></p>
         <ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="{{ route('login') }}" class="ve-footer-admin-link" aria-label="CMS login" title="CMS login"><i class="fa fa-lock"></i></a></li><li><a href="#">Cookie Policy</a></li></ul>
     </div></div></div></footer>
     <script src="{{ asset('js/jquery/jquery-2.2.4.min.js') }}"></script>

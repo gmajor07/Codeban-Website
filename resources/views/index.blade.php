@@ -35,17 +35,11 @@
             <nav class="ve-nav">
                 <ul>
                     <li><a href="{{ route('home') }}" class="active">Home</a></li>
-                    <li class="has-drop">
-                        <a href="{{ route('about') }}">About <i class="fa fa-angle-down"></i></a>
-                        <ul class="ve-dropdown">
-                            <li><a href="{{ route('about') }}">About Us</a></li>
-                            <li><a href="{{ route('services') }}">Our Services</a></li>
-                            <li><a href="{{ route('clients') }}">Clients</a></li>
-                        </ul>
-                    </li>
+                    <li><a href="{{ route('about') }}">About</a></li>
                     <li><a href="{{ route('services') }}">Services</a></li>
                     <li><a href="{{ route('products') }}">Products</a></li>
                     <li><a href="{{ route('clients') }}">Clients</a></li>
+                    <li><a href="{{ route('gallery') }}">Gallery</a></li>
                     <li><a href="{{ route('contact') }}">Contact</a></li>
                 </ul>
             </nav>
@@ -69,7 +63,8 @@
                 <li><a href="{{ route('services') }}">Services</a></li>
                 <li><a href="{{ route('products') }}">Products</a></li>
                 <li><a href="{{ route('clients') }}">Clients</a></li>
-                <li><a href="{{ route('contact') }}">Contact</a></li>
+                    <li><a href="{{ route('gallery') }}">Gallery</a></li>
+                    <li><a href="{{ route('contact') }}">Contact</a></li>
             </ul>
         </div>
     </header>
@@ -105,8 +100,8 @@
         </div>
         <!-- Right Panel: overlapping image cards -->
         <div class="ve-hero-right">
-            <div class="ve-hero-img-main bg-img" style="background-image:url({{ asset('img/bg-img/1.jpg') }});"></div>
-            <div class="ve-hero-img-accent bg-img" style="background-image:url({{ asset('img/bg-img/3.jpg') }});"></div>
+            <div class="ve-hero-img-main bg-img" style="background-image:url({{ asset($homeImages['hero_main']) }});"></div>
+            <div class="ve-hero-img-accent bg-img" style="background-image:url({{ asset($homeImages['hero_accent']) }});"></div>
             <!-- Floating card -->
             <div class="ve-float-card">
                 <i class="fa fa-line-chart"></i>
@@ -143,42 +138,24 @@
                 <p>We supply essential workplace safety products and professional branding services for businesses across Tanzania.</p>
             </div>
             <div class="ve-services-grid">
-                <div class="ve-service-card wow fadeInUp" data-wow-delay="100ms">
-                    <div class="ve-service-icon"><i class="icon-profits"></i></div>
-                    <h4>PPE Products</h4>
-                    <p>Reliable helmets, jackets, goggles, gloves, masks, and industrial safety materials for daily site protection.</p>
-                    <a href="{{ route('services') }}" class="ve-card-link">Learn more <i class="fa fa-long-arrow-right"></i></a>
-                </div>
-                <div class="ve-service-card wow fadeInUp" data-wow-delay="200ms">
-                    <div class="ve-service-icon"><i class="fa fa-user"></i></div>
-                    <h4>Safety Uniforms</h4>
-                    <p>Durable reflective uniforms and workwear designed for visibility, comfort, and site compliance.</p>
-                    <a href="{{ route('services') }}" class="ve-card-link">Learn more <i class="fa fa-long-arrow-right"></i></a>
-                </div>
-                <div class="ve-service-card wow fadeInUp" data-wow-delay="300ms">
-                    <div class="ve-service-icon"><i class="icon-coin"></i></div>
-                    <h4>Official Uniforms</h4>
-                    <p>Clean corporate and official uniforms tailored for teams, institutions, and customer-facing staff.</p>
-                    <a href="{{ route('services') }}" class="ve-card-link">Learn more <i class="fa fa-long-arrow-right"></i></a>
-                </div>
-                <div class="ve-service-card wow fadeInUp" data-wow-delay="400ms">
-                    <div class="ve-service-icon"><i class="icon-smartphone-1"></i></div>
-                    <h4>Footwear</h4>
-                    <p>Safety boots and protective footwear selected for industrial, construction, and field environments.</p>
-                    <a href="{{ route('services') }}" class="ve-card-link">Learn more <i class="fa fa-long-arrow-right"></i></a>
-                </div>
-                <div class="ve-service-card wow fadeInUp" data-wow-delay="500ms">
-                    <div class="ve-service-icon"><i class="icon-diamond"></i></div>
-                    <h4>Fire Extinguishers</h4>
-                    <p>Fire safety equipment and supply support for offices, factories, workshops, and project sites.</p>
-                    <a href="{{ route('services') }}" class="ve-card-link">Learn more <i class="fa fa-long-arrow-right"></i></a>
-                </div>
-                <div class="ve-service-card wow fadeInUp" data-wow-delay="600ms">
-                    <div class="ve-service-icon"><i class="icon-piggy-bank"></i></div>
-                    <h4>Banners & Branding</h4>
-                    <p>Banners, printed materials, embroidery, and branded clothing that help your company stand out professionally.</p>
-                    <a href="{{ route('services') }}" class="ve-card-link">Learn more <i class="fa fa-long-arrow-right"></i></a>
-                </div>
+                @forelse ($homeServices as $service)
+                    <div class="ve-service-card wow fadeInUp" data-wow-delay="{{ min(($loop->iteration * 100), 600) }}ms">
+                        @if ($service->image)
+                            <div class="ve-service-image" style="background-image:url({{ asset($service->image) }});"></div>
+                        @endif
+                        <div class="ve-service-icon"><i class="{{ $service->icon ?: 'fa fa-briefcase' }}"></i></div>
+                        <h4>{{ $service->title }}</h4>
+                        <p>{{ $service->description }}</p>
+                        <a href="{{ route('services') }}" class="ve-card-link">Learn more <i class="fa fa-long-arrow-right"></i></a>
+                    </div>
+                @empty
+                    <div class="ve-service-card ve-service-empty">
+                        <div class="ve-service-icon"><i class="fa fa-briefcase"></i></div>
+                        <h4>Services Coming Soon</h4>
+                        <p>Our services are being prepared in the CMS. Contact us for current support options.</p>
+                        <a href="{{ route('contact') }}" class="ve-card-link">Contact us <i class="fa fa-long-arrow-right"></i></a>
+                    </div>
+                @endforelse
             </div>
         </div>
     </section>
@@ -190,7 +167,7 @@
                 <!-- Image Side -->
                 <div class="col-12 col-lg-5">
                     <div class="ve-whyus-img-wrap wow fadeInLeft" data-wow-delay="100ms">
-                        <div class="ve-whyus-img-main bg-img" style="background-image:url({{ asset('img/bg-img/5.jpg') }});"></div>
+                        <div class="ve-whyus-img-main bg-img" style="background-image:url({{ asset($homeImages['why_us']) }});"></div>
                         <div class="ve-whyus-badge">
                             <strong>10+</strong>
                             <span>Years of Codeban Excellence</span>
@@ -301,7 +278,7 @@
     </section>
 
     <!-- ===== CTA BANNER ===== -->
-    <section class="ve-cta-banner bg-img" style="background-image:url({{ asset('img/bg-img/6.jpg') }});">
+    <section class="ve-cta-banner bg-img" style="background-image:url({{ asset($homeImages['cta_banner']) }});">
         <div class="ve-cta-overlay"></div>
         <div class="container ve-cta-content">
             <div class="row align-items-center">
@@ -327,7 +304,7 @@
             <div class="row">
                 <div class="col-12 col-md-4 wow fadeInUp" data-wow-delay="100ms">
                     <div class="ve-insight-card">
-                        <div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/10.jpg') }});"></div>
+                        <div class="ve-insight-img bg-img" style="background-image:url({{ asset($homeImages['featured_product_1']) }});"></div>
                         <div class="ve-insight-body">
                             <span class="ve-insight-cat">PPE</span>
                             <h5><a href="{{ route('products') }}">Reflective Safety Jackets</a></h5>
@@ -341,7 +318,7 @@
                 </div>
                 <div class="col-12 col-md-4 wow fadeInUp" data-wow-delay="250ms">
                     <div class="ve-insight-card">
-                        <div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/11.jpg') }});"></div>
+                        <div class="ve-insight-img bg-img" style="background-image:url({{ asset($homeImages['featured_product_2']) }});"></div>
                         <div class="ve-insight-body">
                             <span class="ve-insight-cat">Footwear</span>
                             <h5><a href="{{ route('products') }}">Safety Boots</a></h5>
@@ -355,7 +332,7 @@
                 </div>
                 <div class="col-12 col-md-4 wow fadeInUp" data-wow-delay="400ms">
                     <div class="ve-insight-card">
-                        <div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/12.jpg') }});"></div>
+                        <div class="ve-insight-img bg-img" style="background-image:url({{ asset($homeImages['featured_product_3']) }});"></div>
                         <div class="ve-insight-body">
                             <span class="ve-insight-cat">Branding</span>
                             <h5><a href="{{ route('products') }}">T-Shirts, Caps &amp; Banners</a></h5>
@@ -403,7 +380,7 @@
                             <span class="ve-logo-icon">C</span>
                             <span class="ve-logo-text">Codeban<strong></strong></span>
                         </a>
-                        <p>Supplying PPE, uniforms, footwear, fire safety equipment, branding, and professional business solutions in Tanzania.</p>
+                        <p>{{ $siteSettings->tagline }}</p>
                         <div class="ve-social">
                             <a href="#"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
@@ -421,7 +398,8 @@
                         <li><a href="{{ route('services') }}">Services</a></li>
                         <li><a href="{{ route('products') }}">Products</a></li>
                         <li><a href="{{ route('clients') }}">Clients</a></li>
-                        <li><a href="{{ route('contact') }}">Contact</a></li>
+                    <li><a href="{{ route('gallery') }}">Gallery</a></li>
+                    <li><a href="{{ route('contact') }}">Contact</a></li>
                     </ul>
                 </div>
                 <!-- Col 3: Services -->
@@ -439,11 +417,11 @@
                 <div class="col-12 col-sm-6 col-lg-3 mb-50">
                     <h5 class="ve-footer-title">Get In Touch</h5>
                     <ul class="ve-footer-contact">
-                        <li><i class="fa fa-map-marker"></i> Block G Plot No.12, House No.1, Macedonia/Baraka Street, Tabata - Kinyerezi, Dar es Salaam, Tanzania</li>
-                        <li><i class="fa fa-phone"></i> +255 784 993 355 / +255 658 634 462 / +255 713 185 183</li>
-                        <li><i class="fa fa-envelope"></i> codebancl@gmail.com / barakamaka31@gmail.com / info@codeban.co.tz</li>
-                        <li><i class="fa fa-globe"></i> www.codeban.co.tz</li>
-                        <li><i class="fa fa-instagram"></i> @codeban2020</li>
+                        <li><i class="fa fa-map-marker"></i> {{ $siteSettings->address }}</li>
+                        <li><i class="fa fa-phone"></i> {{ $siteSettings->phoneLine() }}</li>
+                        <li><i class="fa fa-envelope"></i> {{ $siteSettings->emailLine() }}</li>
+                        <li><i class="fa fa-globe"></i> {{ $siteSettings->website }}</li>
+                        <li><i class="fa fa-instagram"></i> {{ $siteSettings->instagram }}</li>
                     </ul>
                 </div>
             </div>
@@ -453,7 +431,7 @@
         <div class="ve-footer-bottom">
             <div class="container">
                 <div class="ve-footer-bottom-inner">
-                    <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> Codeban Company Limited. All Rights Reserved <a href="https://github.com/Rabina-Vishwakarma/" class="text-white" target="_blank">Rabina Vishwakarma</a> • Distributed by <a href="https://themewagon.com" class="text-white" target="_blank">ThemeWagon</a></p>
+                    <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved <a href="https://github.com/Rabina-Vishwakarma/" class="text-white" target="_blank">Rabina Vishwakarma</a> • Distributed by <a href="https://themewagon.com" class="text-white" target="_blank">ThemeWagon</a></p>
                     <ul>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms of Use</a></li>

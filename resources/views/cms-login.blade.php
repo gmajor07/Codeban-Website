@@ -8,7 +8,7 @@
     <title>CMS Login - Codeban Company Limited</title>
     <link rel="icon" href="{{ asset('img/core-img/favicon.ico') }}">
     <link rel="stylesheet" href="{{ asset('style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom-override.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom-override.css') }}?v=2">
 </head>
 <body>
     <main class="ve-cms-login">
@@ -20,10 +20,15 @@
             <span class="ve-section-tag">CMS Access</span>
             <h1>Login to Website CMS</h1>
             <p>Use your administrator account to manage Codeban website content.</p>
-            <form class="ve-cms-login-form" action="#" method="post">
+            @if ($errors->any())
+                <div class="ve-cms-alert">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+            <form class="ve-cms-login-form" action="{{ route('login.submit') }}" method="post">
                 @csrf
                 <label for="email">Email Address</label>
-                <input id="email" type="email" name="email" placeholder="admin@codeban.co.tz" required>
+                <input id="email" type="email" name="email" value="{{ old('email') }}" placeholder="admin@codeban.co.tz" required>
 
                 <label for="password">Password</label>
                 <input id="password" type="password" name="password" placeholder="Enter password" required>
