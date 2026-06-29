@@ -5,6 +5,12 @@
     <div class="ve-cms-field"><label for="status">Status</label><select id="status" name="status"><option value="active" @selected(old('status', $product->status) === 'active')>Active</option><option value="inactive" @selected(old('status', $product->status) === 'inactive')>Inactive</option></select></div>
     <div class="ve-cms-field"><label class="ve-cms-check ve-cms-check-field"><input type="checkbox" name="featured" value="1" @checked(old('featured', $product->featured))><span>Featured product</span></label></div>
     <div class="ve-cms-field ve-cms-field-wide"><label for="description">Description</label><textarea id="description" name="description" rows="6">{{ old('description', $product->description) }}</textarea></div>
-    <div class="ve-cms-field ve-cms-field-wide"><label for="image">Product Image</label><input id="image" name="image" type="file" accept="image/*">@if ($product->image)<div class="ve-cms-image-preview" style="background-image:url({{ asset($product->image) }});"></div>@endif</div>
+    <div class="ve-cms-field ve-cms-field-wide">
+        <label for="image">Product Image</label>
+        <input id="image" name="image" type="file" accept="image/*" data-image-preview="product-image-preview">
+        <div id="product-image-preview" class="ve-cms-image-preview {{ $product->image ? '' : 'is-hidden' }}" @if ($product->image) style="background-image:url({{ asset($product->image) }});" @endif></div>
+    </div>
 </div>
 <div class="ve-cms-form-actions"><button type="submit" class="ve-btn-primary"><i class="fa fa-save"></i> Save Product</button></div>
+
+@include('cms.partials.image-preview-script')

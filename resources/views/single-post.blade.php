@@ -83,14 +83,14 @@
                     <div class="ve-sidebar">
                         <div class="ve-sidebar-widget">
                             <h5 class="ve-sidebar-title">Search Products</h5>
-                            <div class="ve-search-box"><input type="text" placeholder="Search products..."><button><i class="fa fa-search"></i></button></div>
+                            <form class="ve-search-box" action="{{ route('products') }}" method="get"><input type="text" name="search" placeholder="Search products..."><button type="submit"><i class="fa fa-search"></i></button></form>
                         </div>
                         <div class="ve-sidebar-widget">
                             <h5 class="ve-sidebar-title">Categories</h5>
                             <ul class="ve-cat-list">
                                 @if ($categories->isNotEmpty())
                                     @foreach ($categories as $category)
-                                        <li><a href="{{ route('products') }}">{{ $category->name }} <span>{{ $category->products_count }}</span></a></li>
+                                        <li><a href="{{ route('products', ['category' => $category->slug]) }}">{{ $category->name }} <span>{{ $category->products_count }}</span></a></li>
                                     @endforeach
                                 @else
                                 <li><a href="#">PPE Products <span>20+</span></a></li>
@@ -145,7 +145,7 @@
         </div>
     </div></div>
     <div class="ve-footer-bottom"><div class="container"><div class="ve-footer-bottom-inner">
-        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved <a href="https://github.com/Rabina-Vishwakarma/" class="text-white" target="_blank">Rabina Vishwakarma</a> • Distributed by <a href="https://themewagon.com" class="text-white" target="_blank">ThemeWagon</a></p>
+        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved <a href="https://goodluckportfolio.vercel.app/" class="text-white" target="_blank">gMajor</a></p>
         <ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="{{ route('login') }}" class="ve-footer-admin-link" aria-label="CMS login" title="CMS login"><i class="fa fa-lock"></i></a></li><li><a href="#">Cookie Policy</a></li></ul>
     </div></div></div></footer>
     <script src="{{ asset('js/jquery/jquery-2.2.4.min.js') }}"></script>

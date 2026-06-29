@@ -47,7 +47,7 @@
             <div class="row">
                 <div class="col-12 col-lg-8">
                     <div class="row">
-                        @if ($products->isNotEmpty())
+                        @if ($products->count() > 0)
                             @foreach ($products as $product)
                                 <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="{{ min(($loop->iteration * 100), 1000) }}ms">
                                     <div class="ve-insight-card">
@@ -64,6 +64,8 @@
                                     </div>
                                 </div>
                             @endforeach
+                        @elseif ($hasProductFilters)
+                        <div class="col-12"><div class="ve-insight-card"><div class="ve-insight-body"><span class="ve-insight-cat">No Results</span><h5>No products matched your search.</h5><p>Try another keyword or browse all product categories.</p><div class="ve-insight-meta"><span><i class="fa fa-search"></i> Search</span><a href="{{ route('products') }}">Clear Filters <i class="fa fa-arrow-right"></i></a></div></div></div></div>
                         @else
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="100ms"><div class="ve-insight-card"><div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/10.jpg') }});"></div><div class="ve-insight-body"><span class="ve-insight-cat">PPE</span><h5><a href="{{ route('contact') }}">Reflective Safety Jackets</a></h5><p>High-visibility workwear for construction, logistics, industrial, and field teams.</p><div class="ve-insight-meta"><span><i class="fa fa-shield"></i> Safety Wear</span><a href="{{ route('contact') }}">Request Quote <i class="fa fa-arrow-right"></i></a></div></div></div></div>
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="200ms"><div class="ve-insight-card"><div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/11.jpg') }});"></div><div class="ve-insight-body"><span class="ve-insight-cat">Footwear</span><h5><a href="{{ route('contact') }}">Safety Boots</a></h5><p>Protective footwear for demanding site, workshop, and industrial environments.</p><div class="ve-insight-meta"><span><i class="fa fa-road"></i> Foot Protection</span><a href="{{ route('contact') }}">Request Quote <i class="fa fa-arrow-right"></i></a></div></div></div></div>
@@ -89,20 +91,44 @@
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="2200ms"><div class="ve-insight-card"><div class="ve-insight-img bg-img" style="background-image:url({{ asset('img/bg-img/9.jpg') }});"></div><div class="ve-insight-body"><span class="ve-insight-cat">Customized Workwear</span><h5><a href="{{ route('contact') }}">Polo Shirts, Branded Caps &amp; Workwear</a></h5><p>Branded caps, polo shirts, and customized workwear for corporate teams and events.</p><div class="ve-insight-meta"><span><i class="fa fa-tags"></i> Branded Wear</span><a href="{{ route('contact') }}">Request Quote <i class="fa fa-arrow-right"></i></a></div></div></div></div>
                         @endif
                     </div>
-                    <div class="ve-pagination"><a href="#" class="active">1</a><a href="#">2</a><a href="#">3</a><a href="#"><i class="fa fa-chevron-right"></i></a></div>
+                    @if ($products->hasPages())
+                        <div class="ve-pagination">
+                            @if ($products->onFirstPage())
+                                <span class="disabled"><i class="fa fa-chevron-left"></i></span>
+                            @else
+                                <a href="{{ $products->previousPageUrl() }}"><i class="fa fa-chevron-left"></i></a>
+                            @endif
+
+                            @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+                                <a href="{{ $url }}" class="{{ $products->currentPage() === $page ? 'active' : '' }}">{{ $page }}</a>
+                            @endforeach
+
+                            @if ($products->hasMorePages())
+                                <a href="{{ $products->nextPageUrl() }}"><i class="fa fa-chevron-right"></i></a>
+                            @else
+                                <span class="disabled"><i class="fa fa-chevron-right"></i></span>
+                            @endif
+                        </div>
+                    @endif
                 </div>
                 <div class="col-12 col-lg-4">
                     <div class="ve-sidebar">
                         <div class="ve-sidebar-widget">
                             <h5 class="ve-sidebar-title">Search Products</h5>
-                            <div class="ve-search-box"><input type="text" placeholder="Search products..."><button><i class="fa fa-search"></i></button></div>
+                            <form class="ve-search-box" action="{{ route('products') }}" method="get">
+                                @if ($categorySlug)
+                                    <input type="hidden" name="category" value="{{ $categorySlug }}">
+                                @endif
+                                <input type="text" name="search" value="{{ $search }}" placeholder="Search products...">
+                                <button type="submit"><i class="fa fa-search"></i></button>
+                            </form>
                         </div>
                         <div class="ve-sidebar-widget">
                             <h5 class="ve-sidebar-title">Categories</h5>
                             <ul class="ve-cat-list">
                                 @if ($categories->isNotEmpty())
                                     @foreach ($categories as $category)
-                                        <li><a href="#">{{ $category->name }} <span>{{ $category->products_count }}</span></a></li>
+                                        <li><a href="{{ route('products', array_filter(['category' => $category->slug, 'search' => $search])) }}" class="{{ $categorySlug === $category->slug ? 'active' : '' }}">{{ $category->name }} <span>{{ $category->products_count }}</span></a></li>
                                     @endforeach
                                 @else
                                 <li><a href="#">PPE Products <span>20+</span></a></li>
@@ -157,7 +183,7 @@
         </div>
     </div></div>
     <div class="ve-footer-bottom"><div class="container"><div class="ve-footer-bottom-inner">
-        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved <a href="https://github.com/Rabina-Vishwakarma/" class="text-white" target="_blank">Rabina Vishwakarma</a> • Distributed by <a href="https://themewagon.com" class="text-white" target="_blank">ThemeWagon</a></p>
+        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved <a href="https://goodluckportfolio.vercel.app/" class="text-white" target="_blank">gMajor</a></p>
         <ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="{{ route('login') }}" class="ve-footer-admin-link" aria-label="CMS login" title="CMS login"><i class="fa fa-lock"></i></a></li><li><a href="#">Cookie Policy</a></li></ul>
     </div></div></div></footer>
     <script src="{{ asset('js/jquery/jquery-2.2.4.min.js') }}"></script>

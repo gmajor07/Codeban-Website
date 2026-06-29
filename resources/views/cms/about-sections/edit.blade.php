@@ -37,11 +37,12 @@
                     <div class="ve-cms-field"><label for="sort_order">Sort Order</label><input id="sort_order" name="sort_order" value="{{ old('sort_order', $section->sort_order) }}" type="number" min="0"></div>
                     <div class="ve-cms-field"><label for="status">Status</label><select id="status" name="status"><option value="active" @selected(old('status', $section->status) === 'active')>Active</option><option value="inactive" @selected(old('status', $section->status) === 'inactive')>Inactive</option></select></div>
                     <div class="ve-cms-field ve-cms-field-wide"><label for="content">Content</label><textarea id="content" name="content" rows="7">{{ old('content', $section->content) }}</textarea></div>
-                    <div class="ve-cms-field ve-cms-field-wide"><label for="image">Image</label><input id="image" name="image" type="file" accept="image/*">@if ($section->image)<div class="ve-cms-image-preview" style="background-image:url({{ asset($section->image) }});"></div>@endif</div>
+                    <div class="ve-cms-field ve-cms-field-wide"><label for="image">Image</label><input id="image" name="image" type="file" accept="image/*" data-image-preview="about-section-image-preview"><div id="about-section-image-preview" class="ve-cms-image-preview {{ $section->image ? '' : 'is-hidden' }}" @if ($section->image) style="background-image:url({{ asset($section->image) }});" @endif></div></div>
                 </div>
                 <div class="ve-cms-form-actions"><button type="submit" class="ve-btn-primary"><i class="fa fa-save"></i> Save About Section</button></div>
             </form>
         </section>
     </main>
+    @include('cms.partials.image-preview-script')
 </body>
 </html>

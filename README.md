@@ -1,27 +1,62 @@
-# VaultEdge – Financial & Loan Services Website Template
+# Codeban Company Limited Website
 
-#### Preview
+A modern demo website for **Codeban Company Limited**, a safety, PPE, uniforms, branding, and industrial supply company in Tanzania.
 
- - [Demo](https://themewagon.github.io/vaultedge/)
+## About
 
-#### Download
- - [Download from ThemeWagon](https://themewagon.com/themes/vaultedge/)
+Codeban Company Limited supplies PPE products, safety uniforms, official uniforms, footwear, fire extinguishers, banners, sewing, embroidery, and branding solutions.
 
-## Getting Started
+## Website Sections
 
-1. Clone Repository
-```
-git clone https://github.com/themewagon/vaultedge.git
-```
+- Home
+- About
+- Services
+- Products
+- Clients
+- Testimonials
+- FAQ
+- Contact
 
+## Technologies Used
 
-## Author 
-```
-Design and code is completely written by Rabina Vishwakarma and development team. 
-```
+- HTML
+- CSS
+- JavaScript
+- Bootstrap
+- Laravel
+- MySQL
 
-## License
+## Demo Deployment
 
- - Design and Code is Copyright &copy; <a href="https://github.com/Rabina-Vishwakarma/" target="_blank">Rabina Vishwakarma</a>
- - Licensed cover under [MIT]
- - Distributed by <a href="https://themewagon.com" target="_blank">ThemeWagon</a># Codeban-Website
+For demo, the static frontend can be deployed on **Netlify**.
+
+Laravel admin/CMS and MySQL database should be deployed later on **cPanel hosting**.
+
+## Local Setup
+
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan serve
+Database
+
+Import the provided SQL file into MySQL/phpMyAdmin, then update .env:
+
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=codeban_cms
+DB_USERNAME=root
+DB_PASSWORD=
+Demo Admin
+Email: admin@codeban.co.tz
+Password: password123
+Contact
+
+Codeban Company Limited
+Safety First
+
+Dar es Salaam, Tanzania
+Website: www.codeban.co.tz

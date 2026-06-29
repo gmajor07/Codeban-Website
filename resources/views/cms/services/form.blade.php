@@ -20,10 +20,8 @@
     </div>
     <div class="ve-cms-field">
         <label for="image">Service Image</label>
-        <input id="image" name="image" type="file" accept="image/*">
-        @if ($service->image)
-            <div class="ve-cms-image-preview" style="background-image:url({{ asset($service->image) }});"></div>
-        @endif
+        <input id="image" name="image" type="file" accept="image/*" data-image-preview="service-image-preview">
+        <div id="service-image-preview" class="ve-cms-image-preview {{ $service->image ? '' : 'is-hidden' }}" @if ($service->image) style="background-image:url({{ asset($service->image) }});" @endif></div>
     </div>
     <div class="ve-cms-field">
         <label for="sort_order">Sort Order</label>
@@ -38,3 +36,5 @@
 <div class="ve-cms-form-actions">
     <button type="submit" class="ve-btn-primary"><i class="fa fa-save"></i> Save Service</button>
 </div>
+
+@include('cms.partials.image-preview-script')

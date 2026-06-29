@@ -8,7 +8,7 @@
     <title>Gallery - Codeban Company Limited</title>
     <link rel="icon" href="{{ asset('img/core-img/favicon.ico') }}">
     <link rel="stylesheet" href="{{ asset('style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom-override.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom-override.css') }}?v=3">
 </head>
 <body>
     <div class="preloader d-flex align-items-center justify-content-center">
@@ -55,9 +55,9 @@
 
             @if ($categories->isNotEmpty())
                 <div class="ve-gallery-filters">
-                    <span>All</span>
+                    <button type="button" class="active" data-gallery-filter="all">All</button>
                     @foreach ($categories as $category)
-                        <span>{{ $category }}</span>
+                        <button type="button" data-gallery-filter="{{ \Illuminate\Support\Str::slug($category) }}">{{ $category }}</button>
                     @endforeach
                 </div>
             @endif
@@ -65,22 +65,33 @@
             <div class="ve-gallery-grid">
                 @if ($galleryImages->isNotEmpty())
                     @foreach ($galleryImages as $galleryImage)
-                        <a href="{{ asset($galleryImage->image) }}" class="ve-gallery-card" target="_blank" rel="noopener">
+                        <a href="{{ asset($galleryImage->image) }}" class="ve-gallery-card" data-gallery-category="{{ \Illuminate\Support\Str::slug($galleryImage->category ?: 'gallery') }}" data-gallery-full="{{ asset($galleryImage->image) }}" data-gallery-title="{{ $galleryImage->title ?: 'Codeban Gallery' }}" data-gallery-label="{{ $galleryImage->category ?: 'Gallery' }}">
                             <span class="ve-gallery-img" style="background-image:url({{ asset($galleryImage->image) }});"></span>
-                            <span class="ve-gallery-caption"><strong>{{ $galleryImage->title ?: 'Codeban Gallery' }}</strong><small>{{ $galleryImage->category ?: 'Gallery' }}</small></span>
+                            <span class="ve-gallery-caption"><small>{{ $galleryImage->category ?: 'Gallery' }}</small><strong>{{ $galleryImage->title ?: 'Codeban Gallery' }}</strong><em>View full image <i class="fa fa-search-plus"></i></em></span>
                         </a>
                     @endforeach
                 @else
                     @foreach ([['PPE Products', 'Safety Equipment', 'img/bg-img/1.jpg'], ['Corporate Uniforms', 'Uniforms', 'img/bg-img/3.jpg'], ['Branding Materials', 'Branding', 'img/bg-img/13.jpg'], ['Fire Safety Supply', 'Safety', 'img/bg-img/14.jpg'], ['Team Workwear', 'Uniforms', 'img/bg-img/32.jpg'], ['Client Deliveries', 'Supply', 'img/bg-img/33.jpg']] as [$title, $category, $image])
-                        <a href="{{ asset($image) }}" class="ve-gallery-card" target="_blank" rel="noopener">
+                        <a href="{{ asset($image) }}" class="ve-gallery-card" data-gallery-category="{{ \Illuminate\Support\Str::slug($category) }}" data-gallery-full="{{ asset($image) }}" data-gallery-title="{{ $title }}" data-gallery-label="{{ $category }}">
                             <span class="ve-gallery-img" style="background-image:url({{ asset($image) }});"></span>
-                            <span class="ve-gallery-caption"><strong>{{ $title }}</strong><small>{{ $category }}</small></span>
+                            <span class="ve-gallery-caption"><small>{{ $category }}</small><strong>{{ $title }}</strong><em>View full image <i class="fa fa-search-plus"></i></em></span>
                         </a>
                     @endforeach
                 @endif
             </div>
         </div>
     </section>
+
+    <div class="ve-gallery-lightbox" id="ve-gallery-lightbox" aria-hidden="true">
+        <button type="button" class="ve-gallery-lightbox-close" aria-label="Close gallery image"><i class="fa fa-times"></i></button>
+        <div class="ve-gallery-lightbox-inner">
+            <img src="" alt="" id="ve-gallery-lightbox-img">
+            <div class="ve-gallery-lightbox-caption">
+                <span id="ve-gallery-lightbox-label"></span>
+                <strong id="ve-gallery-lightbox-title"></strong>
+            </div>
+        </div>
+    </div>
 
     <footer class="ve-footer"><div class="container"><div class="row">
         <div class="col-12 col-sm-6 col-lg-4 mb-50"><div class="ve-footer-brand">
@@ -99,7 +110,7 @@
         </div>
     </div></div>
     <div class="ve-footer-bottom"><div class="container"><div class="ve-footer-bottom-inner">
-        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved</p>
+        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved <a href="https://goodluckportfolio.vercel.app/" class="text-white" target="_blank">gMajor</a></p>
         <ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="{{ route('login') }}" class="ve-footer-admin-link" aria-label="CMS login" title="CMS login"><i class="fa fa-lock"></i></a></li><li><a href="#">Cookie Policy</a></li></ul>
     </div></div></div></footer>
 
@@ -109,5 +120,58 @@
     <script src="{{ asset('js/plugins/plugins.js') }}"></script>
     <script src="{{ asset('js/active.js') }}"></script>
     <script src="{{ asset('js/vaultedge.js') }}"></script>
+    <script>
+        const galleryFilters = document.querySelectorAll('[data-gallery-filter]');
+        const galleryCards = document.querySelectorAll('[data-gallery-category]');
+        const lightbox = document.getElementById('ve-gallery-lightbox');
+        const lightboxImage = document.getElementById('ve-gallery-lightbox-img');
+        const lightboxTitle = document.getElementById('ve-gallery-lightbox-title');
+        const lightboxLabel = document.getElementById('ve-gallery-lightbox-label');
+        const lightboxClose = document.querySelector('.ve-gallery-lightbox-close');
+
+        galleryFilters.forEach((button) => {
+            button.addEventListener('click', () => {
+                const filter = button.dataset.galleryFilter;
+
+                galleryFilters.forEach((item) => item.classList.remove('active'));
+                button.classList.add('active');
+
+                galleryCards.forEach((card) => {
+                    card.classList.toggle('is-hidden', filter !== 'all' && card.dataset.galleryCategory !== filter);
+                });
+            });
+        });
+
+        galleryCards.forEach((card) => {
+            card.addEventListener('click', (event) => {
+                event.preventDefault();
+
+                lightboxImage.src = card.dataset.galleryFull;
+                lightboxImage.alt = card.dataset.galleryTitle;
+                lightboxTitle.textContent = card.dataset.galleryTitle;
+                lightboxLabel.textContent = card.dataset.galleryLabel;
+                lightbox.classList.add('is-open');
+                lightbox.setAttribute('aria-hidden', 'false');
+            });
+        });
+
+        function closeGalleryLightbox() {
+            lightbox.classList.remove('is-open');
+            lightbox.setAttribute('aria-hidden', 'true');
+            lightboxImage.src = '';
+        }
+
+        lightboxClose.addEventListener('click', closeGalleryLightbox);
+        lightbox.addEventListener('click', (event) => {
+            if (event.target === lightbox) {
+                closeGalleryLightbox();
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && lightbox.classList.contains('is-open')) {
+                closeGalleryLightbox();
+            }
+        });
+    </script>
 </body>
 </html>

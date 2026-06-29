@@ -34,11 +34,12 @@
                 <div class="ve-cms-form-grid">
                     <div class="ve-cms-field"><label for="title">Label</label><input id="title" name="title" value="{{ old('title', $section->title) }}" type="text" required></div>
                     <div class="ve-cms-field"><label for="status">Status</label><select id="status" name="status"><option value="active" @selected(old('status', $section->status) === 'active')>Active</option><option value="inactive" @selected(old('status', $section->status) === 'inactive')>Inactive</option></select></div>
-                    <div class="ve-cms-field ve-cms-field-wide"><label for="image">Upload Replacement Image</label><input id="image" name="image" type="file" accept="image/*">@if ($section->image)<div class="ve-cms-image-preview" style="background-image:url({{ asset($section->image) }});"></div>@endif</div>
+                    <div class="ve-cms-field ve-cms-field-wide"><label for="image">Upload Replacement Image</label><input id="image" name="image" type="file" accept="image/*" data-image-preview="page-image-preview"><div id="page-image-preview" class="ve-cms-image-preview {{ $section->image ? '' : 'is-hidden' }}" @if ($section->image) style="background-image:url({{ asset($section->image) }});" @endif></div></div>
                 </div>
                 <div class="ve-cms-form-actions"><button type="submit" class="ve-btn-primary"><i class="fa fa-save"></i> Save Page Image</button></div>
             </form>
         </section>
     </main>
+    @include('cms.partials.image-preview-script')
 </body>
 </html>

@@ -235,7 +235,7 @@
         <div class="ve-footer-bottom">
             <div class="container">
                 <div class="ve-footer-bottom-inner">
-                    <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved <a href="https://github.com/Rabina-Vishwakarma/" class="text-white" target="_blank">Rabina Vishwakarma</a> • Distributed by <a href="https://themewagon.com" class="text-white" target="_blank">ThemeWagon</a></p>
+                    <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> {{ $siteSettings->company_name }}. All Rights Reserved <a href="https://goodluckportfolio.vercel.app/" class="text-white" target="_blank">gMajor</a></p>
                     <ul>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms of Use</a></li>
