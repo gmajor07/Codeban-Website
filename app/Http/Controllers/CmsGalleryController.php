@@ -11,6 +11,19 @@ use Illuminate\View\View;
 
 class CmsGalleryController extends Controller
 {
+    private const CATEGORIES = [
+        'Safety',
+        'PPE',
+        'Safety Uniforms',
+        'Footwear',
+        'Branding',
+        'Printing',
+        'Embroidery',
+        'Fire Safety',
+        'Supply',
+        'Client Deliveries',
+    ];
+
     public function index(): View
     {
         return view('cms.gallery.index', [
@@ -25,6 +38,7 @@ class CmsGalleryController extends Controller
     {
         return view('cms.gallery.create', [
             'galleryImage' => new GalleryImage(['status' => 'active']),
+            'galleryCategories' => self::CATEGORIES,
         ]);
     }
 
@@ -37,7 +51,10 @@ class CmsGalleryController extends Controller
 
     public function edit(GalleryImage $gallery): View
     {
-        return view('cms.gallery.edit', ['galleryImage' => $gallery]);
+        return view('cms.gallery.edit', [
+            'galleryImage' => $gallery,
+            'galleryCategories' => self::CATEGORIES,
+        ]);
     }
 
     public function update(Request $request, GalleryImage $gallery): RedirectResponse
@@ -62,7 +79,7 @@ class CmsGalleryController extends Controller
     {
         $rules = [
             'title' => ['nullable', 'string', 'max:150'],
-            'category' => ['nullable', 'string', 'max:100'],
+            'category' => ['required', Rule::in(self::CATEGORIES)],
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ];
 
