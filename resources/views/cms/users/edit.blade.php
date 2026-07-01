@@ -11,14 +11,7 @@
     <link rel="stylesheet" href="{{ asset('css/custom-override.css') }}?v=2">
 </head>
 <body class="ve-cms-body">
-    <aside class="ve-cms-sidebar">
-        <a href="{{ route('cms.dashboard') }}" class="ve-cms-brand"><span class="ve-logo-icon">C</span><span>Codeban CMS</span></a>
-        <nav class="ve-cms-nav">
-            <a href="{{ route('cms.dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard</a>
-            <a href="{{ route('cms.users.index') }}" class="active"><i class="fa fa-user-circle"></i> Users</a>
-            <a href="{{ route('cms.messages.index') }}"><i class="fa fa-envelope"></i> Messages</a>
-        </nav>
-    </aside>
+    @include('cms.partials.sidebar')
 
     <main class="ve-cms-main">
         <header class="ve-cms-topbar">

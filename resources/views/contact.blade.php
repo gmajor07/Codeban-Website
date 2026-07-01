@@ -107,7 +107,7 @@
                         <div class="ve-ca-hours">
                             <h5><i class="fa fa-clock-o"></i> Office Hours</h5>
                             <ul>
-                                <li><span>Monday - Friday</span><strong>8:00 AM - 5:00 PM</strong></li>
+                                <li><span>Monday - Friday</span><strong>8:00 AM - 4:00 PM</strong></li>
                                 <li><span>Saturday</span><strong>By Appointment</strong></li>
                                 <li><span>Sunday</span><strong>Closed</strong></li>
                             </ul>
