@@ -6,7 +6,6 @@ use App\Models\Page;
 use App\Models\Section;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -60,12 +59,8 @@ class CmsPageImageController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('page-images', 'public');
-            $data['image'] = 'storage/'.$path;
-
-            if ($section->image && str_starts_with($section->image, 'storage/page-images/')) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $section->image));
-            }
+            $data['image'] = $this->storePublicUpload($request->file('image'), 'page-images');
+            $this->deletePublicUpload($section->image, 'page-images');
         } else {
             unset($data['image']);
         }

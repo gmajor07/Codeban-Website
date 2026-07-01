@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -49,9 +48,7 @@ class CmsClientController extends Controller
 
     public function destroy(Client $client): RedirectResponse
     {
-        if ($client->logo && str_starts_with($client->logo, 'storage/clients/')) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $client->logo));
-        }
+        $this->deletePublicUpload($client->logo, 'clients');
 
         $client->delete();
 
@@ -71,12 +68,8 @@ class CmsClientController extends Controller
         $data['sort_order'] = $data['sort_order'] ?? 0;
 
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('clients', 'public');
-            $data['logo'] = 'storage/'.$path;
-
-            if ($client?->logo && str_starts_with($client->logo, 'storage/clients/')) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $client->logo));
-            }
+            $data['logo'] = $this->storePublicUpload($request->file('logo'), 'clients');
+            $this->deletePublicUpload($client?->logo, 'clients');
         } else {
             unset($data['logo']);
         }

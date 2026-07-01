@@ -6,7 +6,6 @@ use App\Models\Page;
 use App\Models\Section;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -139,9 +138,7 @@ class CmsAboutSectionController extends Controller
             return redirect()->route('cms.about-sections.index')->with('status', 'This core About section cannot be deleted.');
         }
 
-        if ($section->image && str_starts_with($section->image, 'storage/about-sections/')) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $section->image));
-        }
+        $this->deletePublicUpload($section->image, 'about-sections');
 
         $section->delete();
 
@@ -166,13 +163,10 @@ class CmsAboutSectionController extends Controller
             return null;
         }
 
-        $path = $request->file('image')->store('about-sections', 'public');
+        $path = $this->storePublicUpload($request->file('image'), 'about-sections');
+        $this->deletePublicUpload($section?->image, 'about-sections');
 
-        if ($section?->image && str_starts_with($section->image, 'storage/about-sections/')) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $section->image));
-        }
-
-        return 'storage/'.$path;
+        return $path;
     }
 
     private function seedListSections(Page $page, array $sections): void

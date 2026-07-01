@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -50,9 +49,7 @@ class CmsCategoryController extends Controller
 
     public function destroy(Category $category): RedirectResponse
     {
-        if ($category->image && str_starts_with($category->image, 'storage/categories/')) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $category->image));
-        }
+        $this->deletePublicUpload($category->image, 'categories');
 
         $category->delete();
 
@@ -74,12 +71,8 @@ class CmsCategoryController extends Controller
         $data['slug'] = $this->uniqueSlug($data['slug'] ?: Str::slug($data['name']), $categoryId);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('categories', 'public');
-            $data['image'] = 'storage/'.$path;
-
-            if ($category?->image && str_starts_with($category->image, 'storage/categories/')) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $category->image));
-            }
+            $data['image'] = $this->storePublicUpload($request->file('image'), 'categories');
+            $this->deletePublicUpload($category?->image, 'categories');
         } else {
             unset($data['image']);
         }

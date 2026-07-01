@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Testimonial;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -48,9 +47,7 @@ class CmsTestimonialController extends Controller
 
     public function destroy(Testimonial $testimonial): RedirectResponse
     {
-        if ($testimonial->image && str_starts_with($testimonial->image, 'storage/testimonials/')) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $testimonial->image));
-        }
+        $this->deletePublicUpload($testimonial->image, 'testimonials');
 
         $testimonial->delete();
 
@@ -68,12 +65,8 @@ class CmsTestimonialController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('testimonials', 'public');
-            $data['image'] = 'storage/'.$path;
-
-            if ($testimonial?->image && str_starts_with($testimonial->image, 'storage/testimonials/')) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $testimonial->image));
-            }
+            $data['image'] = $this->storePublicUpload($request->file('image'), 'testimonials');
+            $this->deletePublicUpload($testimonial?->image, 'testimonials');
         } else {
             unset($data['image']);
         }

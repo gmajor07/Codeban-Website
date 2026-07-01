@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -55,9 +54,7 @@ class CmsProductController extends Controller
 
     public function destroy(Product $product): RedirectResponse
     {
-        if ($product->image && str_starts_with($product->image, 'storage/products/')) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
-        }
+        $this->deletePublicUpload($product->image, 'products');
 
         $product->delete();
 
@@ -82,12 +79,8 @@ class CmsProductController extends Controller
         $data['featured'] = $request->boolean('featured');
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $data['image'] = 'storage/'.$path;
-
-            if ($product?->image && str_starts_with($product->image, 'storage/products/')) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $product->image));
-            }
+            $data['image'] = $this->storePublicUpload($request->file('image'), 'products');
+            $this->deletePublicUpload($product?->image, 'products');
         } else {
             unset($data['image']);
         }

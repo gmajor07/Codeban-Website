@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -56,6 +55,8 @@ class CmsServiceController extends Controller
 
     public function destroy(Service $service): RedirectResponse
     {
+        $this->deletePublicUpload($service->image, 'services');
+
         $service->delete();
 
         return redirect()->route('cms.services.index')->with('status', 'Service deleted successfully.');
@@ -79,12 +80,8 @@ class CmsServiceController extends Controller
         $data['sort_order'] = $data['sort_order'] ?? 0;
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('services', 'public');
-            $data['image'] = 'storage/'.$path;
-
-            if ($service?->image && str_starts_with($service->image, 'storage/services/')) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $service->image));
-            }
+            $data['image'] = $this->storePublicUpload($request->file('image'), 'services');
+            $this->deletePublicUpload($service?->image, 'services');
         } else {
             unset($data['image']);
         }
