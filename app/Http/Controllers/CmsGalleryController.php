@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\GalleryImage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -67,7 +66,11 @@ class CmsGalleryController extends Controller
     public function destroy(GalleryImage $gallery): RedirectResponse
     {
         if ($gallery->image && str_starts_with($gallery->image, 'storage/gallery/')) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $gallery->image));
+            $imagePath = public_path($gallery->image);
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
         }
 
         $gallery->delete();
@@ -90,11 +93,26 @@ class CmsGalleryController extends Controller
         $data = $request->validate($rules);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('gallery', 'public');
-            $data['image'] = 'storage/'.$path;
+            $image = $request->file('image');
+
+            $filename = time().'_'.$image->getClientOriginalName();
+
+            $destinationPath = public_path('storage/gallery');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            $image->move($destinationPath, $filename);
+
+            $data['image'] = 'storage/gallery/'.$filename;
 
             if ($galleryImage?->image && str_starts_with($galleryImage->image, 'storage/gallery/')) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $galleryImage->image));
+                $oldImagePath = public_path($galleryImage->image);
+
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
             }
         } else {
             unset($data['image']);
